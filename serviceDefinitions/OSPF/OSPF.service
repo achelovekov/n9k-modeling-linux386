@@ -1,0 +1,146 @@
+{
+  "ServiceName": "OSPF",
+  "DMEProcessing": [
+    {
+      "ChunkName": "ospfIf",
+      "Paths": [
+        {
+          "Path": "../serviceDefinitions/OSPF/PathFiles/ospfIf.json"
+        }
+      ]
+    },
+    {
+      "ChunkName": "ospfLsaCtrl",
+      "Paths": [
+        {
+          "Path": "../serviceDefinitions/OSPF/PathFiles/ospfLsaCtrl.json"
+        }
+      ]
+    }
+  ],
+  "ServiceConstructPath": [
+    {
+      "ChunkName": "ospfIf",
+      "KeySName": "ifid",
+      "KeySType": "string",
+      "KeyDName": "ospfIf.id",
+      "KeyDType": "string",
+      "KeyLink": "direct",
+      "MatchType": "full",
+      "CommonKeysList": [
+       "ospfIf.adminSt",
+       "ospfIf.area",
+       "ospfIf.bfdCtrl",
+       "ospfIf.helloIntvl",
+       "ospfIf.nwT",
+       "ospfIf.rexmitIntvl",
+       "ospfDom.name",
+       "ospfInst.ctrl"
+      ]
+    },
+    {
+      "ChunkName": "ospfLsaCtrl",
+      "KeySName": "ospfDom.name",
+      "KeySType": "string",
+      "KeyDName": "ospfDom.name",
+      "KeyDType": "string",
+      "KeyLink": "indirect",
+      "MatchType": "full",
+      "CommonKeysList": [
+        "ospfLsaCtrl.arrivalIntvl",
+        "ospfLsaCtrl.gpPacingIntvl",
+        "ospfLsaCtrl.holdIntvl",
+        "ospfLsaCtrl.maxIntvl",
+        "ospfDom.ctrl",
+        "ospfInst.name"
+      ]
+    }
+  ],
+  "ServiceComponents": [
+    {
+      "ComponentName": "Interface",
+      "ComponentKeys": [
+         {
+          "Name": "ospfDom.name",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "ospfIf.adminSt",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "ospfIf.area",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "ospfIf.helloIntvl",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "ospfIf.nwT",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "ospfIf.rexmitIntvl",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        }
+      ]
+    },
+    {
+      "ComponentName": "LSA-control",
+      "ComponentKeys": [
+        {
+          "Name": "ospfLsaCtrl.arrivalIntvl",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "ospfLsaCtrl.gpPacingIntvl",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "ospfLsaCtrl.holdIntvl",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "ospfLsaCtrl.maxIntvl",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        }
+      ]
+    },
+    {
+      "ComponentName": "BFD",
+      "ComponentKeys": [
+        {
+          "Name": "ospfIf.bfdCtrl",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        },
+        {
+          "Name": "ospfDom.ctrl",
+          "Value": "bfd",
+          "MatchType": "equal"
+        }
+      ]
+    },
+    {
+      "ComponentName": "Isolate",
+      "ComponentKeys": [
+        {
+          "Name": "ospfInst.ctrl",
+          "Value": "isolate",
+          "MatchType": "equal"
+        }
+      ]
+    }
+  ]
+}

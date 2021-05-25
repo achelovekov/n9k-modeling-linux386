@@ -1,0 +1,227 @@
+{
+  "ServiceName": "BGP",
+  "DMEProcessing": [
+    {
+      "ChunkName": "bgpPeerCont",
+      "Paths": [
+        {
+          "Path": "../serviceDefinitions/BGP/PathFiles/bgpPeerContNoAFIOptions.json"
+        },
+        {
+          "Path": "../serviceDefinitions/BGP/PathFiles/bgpPeerContBgpRtCtrlP.json"
+        },
+        {
+          "Path": "../serviceDefinitions/BGP/PathFiles/bgpPeerContBgpMaxPfxP.json"
+        }
+      ]
+    },
+    {
+      "ChunkName": "bgpDomAf",
+      "Paths": [
+        {
+          "Path": "../serviceDefinitions/BGP/PathFiles/bgpDomAfNoBgpInterLeakP.json"
+        },
+        {
+          "Path": "../serviceDefinitions/BGP/PathFiles/bgpDomAfBgpInterLeakP.json"
+        }
+      ]
+    },
+    {
+      "ChunkName": "bgpPeerEntry",
+      "Paths": [
+        {
+          "Path": "../serviceDefinitions/BGP/PathFiles/bgpPeerEntry.json"
+        }
+      ]
+    },
+    {
+      "ChunkName": "bgpPeerAf",
+      "Paths": [
+        {
+          "Path": "../serviceDefinitions/BGP/PathFiles/bgpPeerAf.json"
+        }
+      ]
+    }
+  ],
+  "ServiceConstructPath": [
+    {
+      "ChunkName": "bgpPeerEntry",
+      "KeySName": "addr",
+      "KeySType": "string",
+      "KeyDName": "bgpPeer.addr",
+      "KeyDType": "string",
+      "KeyLink": "direct",
+      "MatchType": "full",
+      "CommonKeysList": [
+        "bgpDom.name",
+        "bgpPeer.peerImp",
+        "bgpInst.isolate"
+       ],
+      "Filter": {
+        "Name": "bgpPeerAfEntry.type",
+        "Key": "bgpPeerAfEntry.type"
+      },
+      "SplitSearch": [
+        {
+          "SplitSearchKeys": [
+              "bgpPeerAfEntry.type"
+            ],
+          "SplitSearchDirectives": [
+            {
+              "SearchFrom": "bgpPeerAfEntry.type",
+              "SearchFor": "bgpPeerAfEntry.type"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ChunkName": "bgpPeerCont",
+      "KeySName": "bgpPeer.peerImp",
+      "KeySType": "string",
+      "KeyDName": "bgpPeerCont.name",
+      "KeyDType": "string",
+      "KeyLink": "indirect",
+      "MatchType": "full",
+      "CommonKeysList": [
+        "bgpPeerCont.ctrl"
+      ],
+      "SplitSearch": [
+        {
+          "SplitSearchKeys": [
+              "bgpMaxPfxP.maxPfx",
+              "bgpPeerAf.sendComExt",
+              "bgpPeerAf.sendComStd"
+            ],
+          "SplitSearchDirectives": [
+            {
+              "SearchFrom": "bgpPeerAfEntry.type",
+              "SearchFor": "bgpPeerAf.type"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ChunkName": "bgpDomAf",
+      "KeySName": "bgpDom.name",
+      "KeySType": "string",
+      "KeyDName": "bgpDom.name",
+      "KeyDType": "string",
+      "KeyLink": "indirect",
+      "MatchType": "full",
+      "CommonKeysList": [],
+      "Filter": {
+        "Name": "bgpInterLeakP.proto",
+        "Key": "bgpInterLeakP.proto"
+      },
+      "SplitSearch": [
+        {
+            "SplitSearchKeys": [
+                    "bgpDomAf.critNhTimeout",
+                    "bgpDomAf.nonCritNhTimeout",
+                    "bgpDomAf.advPip"
+            ],
+            "SplitSearchDirectives": [
+                {
+                    "SearchFrom": "bgpPeerAfEntry.type",
+                    "SearchFor": "bgpDomAf.type"
+                }
+            ]
+        },
+        {
+            "SplitSearchKeys": [
+                    "bgpInterLeakP.scope",
+                    "bgpInterLeakP.rtMap"
+                ],
+            "SplitSearchDirectives": [
+                {
+                    "SearchFrom": "bgpPeerAfEntry.type",
+                    "SearchFor": "bgpDomAf.type"
+                },
+                {
+                    "SearchFrom": "bgpInterLeakP.proto",
+                    "SearchFor": "bgpInterLeakP.proto"
+                }
+            ]
+        }
+     ]
+    },
+    {
+      "ChunkName": "bgpPeerAf",
+      "KeySName": "addr",
+      "KeySType": "string",
+      "KeyDName": "bgpPeer.addr",
+      "KeyDType": "string",
+      "KeyLink": "indirect",
+      "MatchType": "full",
+      "CommonKeysList": [],
+      "SplitSearch": [
+        {
+          "SplitSearchKeys": [
+              "bgpRtCtrlP.rtMap",
+              "bgpRtCtrlP.direction"
+            ],
+          "SplitSearchDirectives": [
+            {
+              "SearchFrom": "bgpPeerAfEntry.type",
+              "SearchFor": "bgpPeerAf.type"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "ServiceComponents": [
+    {
+      "ComponentName": "IPv4",
+      "ComponentKeys": [
+         {
+          "Name": "bgpPeerAfEntry.type.ipv4-ucast",
+          "Value": "ipv4-ucast",
+          "MatchType": "equal"
+        }
+      ]
+    },
+    {
+      "ComponentName": "L2VPN-EVPN",
+      "ComponentKeys": [
+        {
+          "Name": "bgpPeerAfEntry.type.l2vpn-evpn",
+          "Value": "l2vpn-evpn",
+          "MatchType": "equal"
+        }
+      ]
+    },
+    {
+      "ComponentName": "BFD",
+      "ComponentKeys": [
+        {
+          "Name": "bgpPeerCont.ctrl",
+          "Value": "bfd,cap-neg-off",
+          "MatchType": "equal"
+        }
+      ]
+    },
+    {
+      "ComponentName": "Template",
+      "ComponentKeys": [
+        {
+          "Name": "bgpPeer.peerImp",
+          "Value": "anyValue",
+          "MatchType": "equal"
+        }
+      ]
+    },
+    {
+      "ComponentName": "Isolate",
+      "ComponentKeys": [
+        {
+          "Name": "bgpInst.isolate",
+          "Value": "enabled",
+          "MatchType": "equal"
+        }
+      ]
+    }
+  ]
+}
