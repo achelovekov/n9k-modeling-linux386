@@ -67,6 +67,17 @@
     </select>
     <input type="submit" value="Execute" />
 </form>
+<form action="getActualServiceFootprintForAll">
+    <label for="serviceName">Show actual service footprint report</label>
+    <select id="serviceName" name="serviceName">
+        <option value="">--Please choose an option--</option>
+        {{range $i, $v := .ServiceList}}
+            {{$value := index $v "ServiceName"}}
+            <option value="{{$value}}">{{$value}}</option>
+        {{end}}
+    </select>
+    <input type="submit" value="Execute" />
+</form>
 <hr>
 <form action="getCompianceData">
     <label for="getCompianceData">Construct templated footprint</label>
